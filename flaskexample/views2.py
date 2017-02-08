@@ -48,13 +48,7 @@ def getitem(obj, item, default):
 
 
 # get database 
-dbname = 'combined_data'
-username = 'jnguyen'
-    ## 'engine' is a connection to a database
-    ## Here, we're using postgres, but sqlalchemy can connect to other things too.
-engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
-con = None
-con = psycopg2.connect(database = dbname, user = username)
+
 combined_data = pd.DataFrame.from_csv('./combined_data.csv')
 
 
