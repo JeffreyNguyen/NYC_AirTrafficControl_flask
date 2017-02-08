@@ -70,25 +70,6 @@ table, th, td
 }
 """
 
-
-pie_fracs = [20, 30, 40, 10]
-pie_labels = ["A", "B", "C", "D"]
-
-
-
-
-
-
-labels = []
-#N=100
-#for i in range(N):
-    #label = df.ix[[i], :].T
-    #label.columns = ['Row {0}'.format(i)]
-    # .to_html() is unicode; so make leading 'u' go away with str()
-    #labels.append(str(label.to_html()))
-    
-    
-    
     
     
 def draw_fig(data):
@@ -105,7 +86,8 @@ def draw_fig(data):
     --------
     d3 representation of figure
     """
-    fig_type=data["plot_type"]
+    fig_type1=data["plot_type"]
+    fig_type2=data["plot_type2"]
     location=data["location"]
     view=data["view"]
     location=float(location)
@@ -118,6 +100,8 @@ def draw_fig(data):
         
     if location ==16:
         query_results=query_results.groupby(query_results.index).mean()
+    print query_results['location'].unique()
+        
     print view
     if view=='dayofweek':
         query_results=query_results.groupby(query_results.index.dayofweek).mean()
@@ -133,103 +117,74 @@ def draw_fig(data):
     #df = pd.DataFrame(index=range(x.shape[0]))
     #df['x'] = x
     with lock:
-        fig, (ax0, ax1) = plt.subplots(nrows=2, sharex=True, figsize=(8, 4))
-        y = query_results['value'].plot(ax=ax0)
-        ax0.set_xlabel('Time')
-        ax0.set_ylabel('PM2.5 (ppm)')
-        if fig_type == "Pollution":
-            y = query_results['value'].plot(ax=ax1)
-        elif fig_type == "Traffic":
-            ax1.set_ylabel('Traffic Score')
-            lines = query_results['local_traffic'].plot(ax=ax1)
-            # plugins.connect(fig, plugins.LineLabelTooltip(lines[0]))
-
-        elif fig_type == "Temperature":
-            ax1.set_ylabel('Maximum Temperature  (C)')
-            #print query_results['TempMax']
-            y = query_results['TempMax'].plot(ax=ax1)
-            #points=ax1.scatter(query_results.index,query_results['TempMax'],
-            #           c='r',
-            #           s=50,
-            #           alpha=0,
-            #           cmap=plt.cm.jet)
-            
-            #labels=query_results['TempMax'].values.astype(str)
-            #tooltip = plugins.PointHTMLTooltip(points, labels=labels,
-            #                       voffset=10, hoffset=10, css=css)
-            
-            #plugins.connect(fig, tooltip)
-            
-        elif fig_type == "Wind":
-            ax1.set_ylabel('Wind Velocity')
-            y = query_results['Wind_v'].plot(ax=ax1)
-        elif fig_type == "Heating":
-            ax1.set_ylabel('Heating Oil Consumption')
-            y = query_results['Consumption_Oil'].plot(ax=ax1)
-            
-        elif fig_type == "scatter":
-            N = query_results['TempMax'].count()
-            query_results['TempMax'].plot(ax=ax1)
-            scatter = ax1.scatter(query_results.index,
-                                 query_results['TempMax'],
-                                 c='r',
-                                 s=50,
-                                 alpha=0.3,
-                                 cmap=plt.cm.jet)
-            ax1.grid(color='white', linestyle='solid')
-
-            labels = ['point {0}'.format(i + 1) for i in range(N)]
-            tooltip = mpld3.plugins.PointLabelTooltip(scatter, labels=labels)
-            mpld3.plugins.connect(fig, tooltip)
-            
-        elif fig_type == "Reduction":
-            ax1.set_ylabel('Pollution Reduction')
-            y = query_results['reduction'].plot(ax=ax1);
-        elif fig_type == "area":
-            ax.plot(x, y)
-            ax.fill_between(x, 0, y, alpha=0.2)
-            
-    if view=='dayofweek':
-        ax1.set_xlabel('Day of Week')
-    elif view == 'month':
-        ax1.set_xlabel('Month of Year')
-    elif view == 'all':
-        # start=datetime.datetime(year=2011,month=9,day=1);
-        end=datetime.datetime(year=2013,month=1,day=1);
-        # plt.xlim(start,end)            
-        # ax1.set_xlabel('Time')
-
-        #plugins.connect(fig, plugins.MousePosition(fontsize=14))
         
-    #fig.autofmt_xdate()
+        
+        fig, ax_all = plt.subplots(nrows=2, sharex=True, figsize=(8, 4))
+        
+        for i,fig_type in enumerate([fig_type1, fig_type2]):
+            ax=ax_all[i]
+            if fig_type == "Pollution":
+                target = 'value'
+                ax.set_ylabel('PM2.5 Pollution (ppm)',fontsize=17)
+            elif fig_type == "Traffic":
+                ax.set_ylabel('Traffic Score',fontsize=17)
+                target ='local_traffic'
+                # plugins.connect(fig, plugins.LineLabelTooltip(lines[0]))
+
+            elif fig_type == "Temperature":
+                ax.set_ylabel('Temperature  (C)',fontsize=17)
+                target='TempAvg'
+
+            elif fig_type == "Wind":
+                ax.set_ylabel('Wind Velocity',fontsize=17)
+                target='Wind_v'
+
+            elif fig_type == "Heating":
+                ax.set_ylabel('Heating Oil Consumption',fontsize=17)
+                target='Consumption_Oil'
+
+            elif fig_type == "scatter":
+                N = query_results['TempMax'].count()
+                query_results['TempMax'].plot(ax=ax1)
+                scatter = ax1.scatter(query_results.index,
+                                     query_results['TempMax'],
+                                     c='r',
+                                     s=50,
+                                     alpha=0.3,
+                                     cmap=plt.cm.jet)
+                ax1.grid(color='white', linestyle='solid')
+
+                labels = ['point {0}'.format(i + 1) for i in range(N)]
+                tooltip = mpld3.plugins.PointLabelTooltip(scatter, labels=labels)
+                mpld3.plugins.connect(fig, tooltip)
+
+            elif fig_type == "Reduction":
+                ax.set_ylabel('Pollution Reduction',fontsize=17)
+                target='reduction'
+
+            query_results[target].plot(ax=ax)
+            scatter_out=query_results.dropna()
+            scatter = ax.scatter(scatter_out.index,
+                                     scatter_out[target],
+                                     c='r',
+                                     s=200,
+                                     alpha=0,
+                                     cmap=plt.cm.jet)
+            ax.grid(color='white', linestyle='solid')
+            labels = ['value: {0}'.format(np.round(i)) for i in scatter_out[target].as_matrix()]
+            tooltip = mpld3.plugins.PointLabelTooltip(scatter, labels=labels)
+            mpld3.plugins.connect(fig, tooltip)            
+            ax.yaxis.labelpad = 10 
+
+
+        if view=='dayofweek':
+            ax.set_xlabel('Day of Week',fontsize=17)
+        elif view == 'month':
+            ax.set_xlabel('Month of Year',fontsize=17)
+        elif view == 'all':
+            ax.set_xlabel('Time',fontsize=17)
+
     return mpld3.fig_to_html(fig,figid='fig')
-
-#app = Flask(__name__)
-
-def polynomial():
-    """ Very simple embedding of a polynomial chart
-    """
-
-    # Grab the inputs arguments from the URL
-    args = request.args
-
-    # Get all the form arguments in the url with defaults
-    color = colors[getitem(args, 'color', 'Black')]
-    _from = int(getitem(args, '_from', 0))
-    to = int(getitem(args, 'to', 10))
-
-    # Create a polynomial line graph with those arguments
-    x = list(range(_from, to + 1))
-    fig = figure(title="Polynomial")
-    fig.line(x, [i ** 2 for i in x], color=color, line_width=2)
-
-    js_resources = INLINE.render_js()
-    css_resources = INLINE.render_css()
-
-    script, div = components(fig)
-    return render_template('index_mpld3.html',script=script, div=div)
-
-
 
 
 @app.route('/')
@@ -245,7 +200,3 @@ def query():
     print data
     print type(data["location"])
     return draw_fig(data)
-    #return polynomial()
-
-#if __name__ == '__main__':
-#app.run(debug=True, host='0.0.0.0')
