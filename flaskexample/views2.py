@@ -55,6 +55,7 @@ username = 'jnguyen'
 engine = create_engine('postgres://%s@localhost/%s'%(username,dbname))
 con = None
 con = psycopg2.connect(database = dbname, user = username)
+combined_data = pd.DataFrame.from_csv('./combined_data.csv')
 
 
 
@@ -124,18 +125,13 @@ def draw_fig(data):
     location=data["location"]
     view=data["view"]
     location=float(location)
-    if location!=16:
-        location_query="""WHERE location="""+str(location)
-    else:
-        location_query=""
-        
-    sql_query = "SELECT * FROM combined_data " + location_query +" ;"
-    query_results = pd.read_sql_query(sql_query,con)
     
-    x = query_results['index'].astype('datetime64[ns]')#range(100)
-    query_results.index=x
-    query_results.index =query_results.index.map(lambda t: t.replace(hour=0))
-
+    
+    if location!=16:
+        query_results=combined_data[combined_data['location']==location]
+    else:
+        query_results=combined_data.copy()
+        
     if location ==16:
         query_results=query_results.groupby(query_results.index).mean()
     print view
@@ -145,7 +141,8 @@ def draw_fig(data):
         query_results=query_results.groupby(query_results.index.month).mean()        
     elif view == 'all':
         query_results=query_results.asfreq('1d')
-    
+        
+    x=query_results.index
     if len(x)==0:
         return ""
    
