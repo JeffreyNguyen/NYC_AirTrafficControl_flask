@@ -1,0 +1,216 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+
+<style> 
+div #sidebar
+{
+  padding:10px 20px; 
+}
+</style>
+
+<style> 
+div #sidebar2
+{
+  border:2px solid #a1a1a1;
+  padding:10px 20px; 
+  border-radius:15px;
+}
+</style>
+
+<style> 
+div #map
+{
+  padding:0px; 
+  border-radius:0px;
+  bottom: 0;
+  left: 0;
+  height: 400px;
+  width: 300px;
+  margin: 0px;
+    }
+</style>
+
+
+<style> 
+div #fig
+{
+  padding:5px 5px; 
+  border-radius:15px;
+  height: 400px;
+  width: 400px;
+    }
+</style>
+
+<span id="sidebar">
+  <span>Location</span>
+  <br/>
+  <input type="radio" name="location" value="1" id="1" >1</input>
+  <input type="radio" name="location" value="2" id="2">2</input>
+  <input type="radio" name="location" value="3" id="3">3</input>
+  <br/>
+
+  <input type="radio" name="location" value="4" id="4">4</input>
+  <input type="radio" name="location" value="5" id="5">5</input>
+  <input type="radio" name="location" value="6" id="6" checked>6</input>
+  <br/>
+
+  <input type="radio" name="location" value="7" id="7">7</input>
+  <input type="radio" name="location" value="8" id="8">8</input>
+  <input type="radio" name="location" value="9" id="9">9</input>
+  <br/>
+
+  <input type="radio" name="location" value="10" id="10">10</input>
+  <input type="radio" name="location" value="11" id="11">11</input>
+  <input type="radio" name="location" value="12" id="12">12</input>
+  <br/>
+  <input type="radio" name="location" value="13" id="13">13</input>
+  <input type="radio" name="location" value="14" id="14">14</input>
+  <input type="radio" name="location" value="15" id="15">15</input>
+  <br/>
+  <input type="radio" name="location" value="16" id="16">Average All</input>
+  <br/>
+  <button type="button" id="query">View Plot</button>
+  <br/>
+</span>
+
+<div id="sidebar">
+  <span>Views</span>
+  <br/>
+  <input type="radio" name="view" value="all" checked>View All</input>
+  <br/>
+  <input type="radio" name="view" value="dayofweek" >Day Of Week</input>
+  <br/>
+  <input type="radio" name="view" value="month" >Month of Year</input>
+  <br/>
+  <br/>
+  <br/>
+  <br/>
+</div>
+
+<div id="sidebar2">
+  <span>Select plot type</span>
+  <br/>
+  <input type="radio" name="plot_type" value="Pollution" checked>Pollution</input>
+  <br/>
+  <input type="radio" name="plot_type" value="Temperature" >Temperature</input>
+  <br/>
+  <input type="radio" name="plot_type" value="Traffic" >Traffic</input>
+  <br/>
+  <input type="radio" name="plot_type" value="scatter" >Scatter</input>
+  <br/>
+  <input type="radio" name="plot_type" value="Wind" >Wind</input>
+  <br/>
+  <input type="radio" name="plot_type" value="Heating" >Heating</input>
+  <br/>
+  <input type="radio" name="plot_type" value="Reduction" >Pollution Reduction</input>
+  <br/>
+</div>
+
+
+
+
+
+<div id="map"></div>
+<script type="text/javascript">
+  // The first parameter are the coordinates of the center of the map
+  // The second parameter is the zoom level
+  var map = L.map('map').setView([ 40.7565088 , -73.94508687], 10);
+  
+  // {s}, {z}, {x} and {y} are placeholders for map tiles
+  // {x} and {y} are the x/y of where you are on the map
+  // {z} is the zoom level
+  // {s} is the subdomain of cartodb
+    var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+  });
+  
+  // Now add the layer onto the map
+  map.addLayer(layer);
+        var dir={direction: 'auto'};
+        var m1 = L.marker([ 40.720622, -74.003674]).bindLabel('1. 345 Canal Street',dir).addTo(map);
+        var m2 = L.marker([ 40.84955 , -73.935649]).bindLabel('2. 150 Wadsworth Avenue',dir).addTo(map);
+        var m3 = L.marker([ 40.72333 , -73.98231 ]).bindLabel('3. 600 East 6th Street',dir).addTo(map);
+        var m4 = L.marker([ 40.81133 , -73.95321 ]).bindLabel('4. 365 West 125th Street',dir).addTo(map);
+        var m5 = L.marker([ 40.71163 , -74.00535 ]).bindLabel('5. 1 Nassau Street',dir).addTo(map);
+        var m6 = L.marker([ 40.73    , -73.984   ]).bindLabel('6. 185 1st Avenue',dir).addTo(map);
+        var m7 = L.marker([ 40.71436 , -73.99518 ]).bindLabel('7. 40 Division Street',dir).addTo(map);
+        var m8 = L.marker([ 40.81976 , -73.94825 ]).bindLabel('8. 201 Convent Avenue',dir).addTo(map);
+        var m9 = L.marker([ 40.83606 , -73.92009 ]).bindLabel('9. 1225 Gerard Avenue',dir).addTo(map);
+        var m10 = L.marker([ 40.816   , -73.902   ]).bindLabel('10. 664 Dawson Street',dir).addTo(map);
+        var m11 = L.marker([ 40.81551 , -73.88553 ]).bindLabel('11. 730 Bryant Avenue',dir).addTo(map);
+        var m12 = L.marker([ 40.72698 , -73.89313 ]).bindLabel('12. 69-70 Grand Avenue',dir).addTo(map);
+        var m13 = L.marker([ 40.73614 , -73.82153 ]).bindLabel('13. Queens College Track',dir).addTo(map);
+        var m14 = L.marker([ 40.64182 , -74.01871 ]).bindLabel('14. Public School 140',dir).addTo(map);
+        var m15 = L.marker([ 40.69454 , -73.92769 ]).bindLabel('15. Public School 274',dir).addTo(map);
+    
+        m1.on('click', function(){document.getElementById("1").checked = true});
+        m2.on('click', function(){document.getElementById("2").checked = true});
+        m3.on('click', function(){document.getElementById("3").checked = true});
+        m4.on('click', function(){document.getElementById("4").checked = true});
+        m5.on('click', function(){document.getElementById("5").checked = true});
+        m6.on('click', function(){document.getElementById("6").checked = true});
+        m7.on('click', function(){document.getElementById("7").checked = true});
+        m8.on('click', function(){document.getElementById("8").checked = true});
+        m9.on('click', function(){document.getElementById("9").checked = true});
+        m10.on('click', function(){document.getElementById("10").checked = true});
+        m11.on('click', function(){document.getElementById("11").checked = true});
+        m12.on('click', function(){document.getElementById("12").checked = true});
+        m13.on('click', function(){document.getElementById("13").checked = true});
+        m14.on('click', function(){document.getElementById("14").checked = true});
+        m15.on('click', function(){document.getElementById("15").checked = true});
+</script>
+
+
+
+<div id="loading-div-background">
+  <div id="loading-div" class="ui-corner-all" >
+    <img style="height:64px;margin:10px;" src="static/css/images/282.GIF" alt="Loading.."/>
+    <h3 style="color:gray;font-weight:normal;">Loading....</h3>
+  </div>
+</div>
+
+
+<div id="container" style="position: relative; top:-380px; left:50px"></div>
+<script type="text/javascript">   
+    
+    
+$("#loading-div-background").css({ opacity: 0.7 });
+function datetime_to_epoch(datetime)
+{
+  var aDate = datetime.split('/');
+  var epoch = new Date(aDate[2] + "," + aDate[0] + "," + aDate[1]).getTime() / 1000;
+  return epoch;
+}
+
+$("#query").click(function() {  
+
+  $("#loading-div-background").show();
+  $("#container").hide();
+  var plot_type = $('input:radio[name=plot_type]:checked').val();
+  var location = $('input:radio[name=location]:checked').val();
+  var view = $('input:radio[name=view]:checked').val();
+
+  var qu = {"plot_type":plot_type,
+           "location":location,
+           "view":view
+           }
+  $.ajax({
+    type: "POST",
+    async:true,
+    contentType: "application/json; charset=utf-8",
+    url: "/query",
+    data: JSON.stringify(qu),
+    success: function (data) {     
+     var graph = $("#container");
+     graph.html(data);   
+     $("#loading-div-background").hide();      
+     $("#container").show();
+   },
+   dataType: "html"
+ });
+});
+
+</script>
+{% endblock %}
