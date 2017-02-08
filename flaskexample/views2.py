@@ -18,16 +18,6 @@ import mpld3
 from mpld3 import plugins
 warnings.filterwarnings('ignore')
 
-
-from sqlalchemy import create_engine
-from sqlalchemy_utils import database_exists, create_database
-import psycopg2
-
-from bokeh.embed import components
-from bokeh.plotting import figure
-from bokeh.resources import INLINE
-from bokeh.util.string import encode_utf8
-
 colors = {
     'Black': '#000000',
     'Red':   '#FF0000',
