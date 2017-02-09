@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+
+<style> 
+div #sidebar
+{
+  padding:10px 20px; 
+}
+</style>
+
+<style> 
+div #sidebar2
+{
+  border:2px solid #a1a1a1;
+  padding:10px 20px; 
+  border-radius:15px;
+}
+</style>
+
+<style> 
+div #map
+{
+  padding:0px; 
+  border-radius:0px;
+  bottom: 0;
+  left: 0;
+  height: 400px;
+  width: 300px;
+  margin: 0px;
+    }
+</style>
+
+
+<style> 
+div #fig
+{
+  padding:5px 5px; 
+  border-radius:15px;
+  height: 400px;
+  width: 200px;
+    }
+</style>
+
+<body>
+    Welcome to NYC Air Traffic Control. This is a tool to help city planners and health officials explore data related to Air Pollution in NYC. Particulate Matter (PM2.5) pollution is a major health concern around the world and in NYC. Many cities have tried to mitigate pollution by reducing car traffic in certain areas on certain days. Here, I have collected historical data from multiple factors that influence PM2.5 levels, including traffic, weather, and amount of heating oil used. You can explore this data at several locations throughout the city. I've also made a model to predict the impact shutting off traffic within 3 miles of a PM2.5 measurement location.
+  <br/>
+    
+    The code for the model and the data can be found at 
+    <a href="https://github.com/JeffreyNguyen/NYC_AirTrafficControl">Github</a> and you can read more about me at my <a href="https://www.linkedin.com/in/jeffreypnguyen/">Linkedin</a> page.
+     
+    
+  <br/>
+  <br/>
+  <br/>
+
+</body>
+
+<iframe src="https://docs.google.com/presentation/d/1T-VpasGjuaFc2poSzQQEABVuruS7b2GUT0y64h4Fq1Y/embed?start=false&loop=false&delayms=3000" frameborder="0" width="640" height="375" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+
+
+{% endblock %}

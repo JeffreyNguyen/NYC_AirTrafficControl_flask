@@ -192,6 +192,10 @@ def home():
     print 'home'
     return render_template('index_mpld3.html')
 
+@app.route('/about')
+def aboutme():
+    return render_template("aboutme.html")
+
 
 @app.route('/query', methods=['POST'])
 def query():
